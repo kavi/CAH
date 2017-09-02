@@ -1,0 +1,24 @@
+<div class="scrollable">
+  <h1 class="scrollable-header app-name">Play CAH <small>0.0</small></h1>  
+  <div class="scrollable-content">
+    <div class="list-group" ui-turn-off='uiSidebarLeft'>
+      <a class="list-group-item" href="#/newgame">New Game <i class="fa fa-chevron-right pull-right"></i></a>
+      <a class="list-group-item {{ g.id == game.id ? 'active' : '' }}" ng-repeat="g in filterGames(isStarted) | orderBy : ['currentPlayer.actionPerformed'] : false" ng-show="g.currentPlayer" href="#/play/{{ g.id }}/">
+	<big>{{ g.name }}</big>
+	<small ng-show="g.started"> ({{ g.phase.name }})</small>
+	<button class="btn btn-sm btn-green pull-right" ng-show="g.started && !g.currentPlayer.actionPerformed"><i class="fa fa-chevron-right fa-navbar"></i></button>
+	<button class="btn btn-sm pull-right btn-warning" ng-show="g.started && g.currentPlayer.actionPerformed"><i class="fa fa-coffee fa-navbar"></i></button>
+      </a>
+
+      <a class="list-group-item" ng-repeat="g in filterGames(isStarted, true) | orderBy : ['name'] : false" href=""  ng-show="g.currentPlayer.user.id == user.id">
+	<big>{{ g.name }}</big>
+	<small> ({{ g.owner.name }})</small>
+	<button class="btn btn-sm pull-right btn-danger" ng-show="!g.started && !canStartGame(g, user)"><i class="fa fa-clock-o fa-navbar"></i></button>
+	<button ng-click="startGame(g)" class="btn btn-sm pull-right btn-green" ng-show="!g.started && canStartGame(g, user)"><i class="fa fa-play fa-navbar"></i> Start</button>
+      </a>
+
+      <a class="list-group-item" href="" ng-click="logout()"><i class="fa fa-sign-out fa-navbar"></i> Logout</a>
+
+    </div>
+  </div>
+</div>

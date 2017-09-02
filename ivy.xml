@@ -1,0 +1,52 @@
+<ivy-module version="1.0">
+  <info organisation="internal" module="CardsAgainstHumanity" status="integration"/>
+  <configurations>
+    <conf name="compile"/>
+    <conf name="runtime" />
+    <conf name="javadoc" />
+    <conf name="sources"/>
+    <conf name="test"/>
+  </configurations>
+  <publications>
+    <artifact conf="compile,runtime"/>
+    <artifact name="CardsAgainstHumanity-sources" type="source" ext="jar" conf="sources" />
+    <!--artifact name="CardsAgainstHumanity-doc" type="javadoc" ext="jar" conf="javadoc" /-->
+  </publications>
+  <dependencies defaultconf="compile->compile;runtime->runtime;sources->sources">
+          <!-- Restlet -->
+        <dependency org="thirdparty" name="org.restlet" rev="2.2.1" conf="compile->compile;runtime->runtime;sources"/>
+        <dependency org="thirdparty" name="org.restlet.ext.jetty" rev="2.2.1" conf="compile->compile;runtime->runtime;sources"/>
+        <dependency org="thirdparty" name="org.restlet.ext.json" rev="2.2.1" conf="compile->compile;runtime->runtime;sources"/>
+        
+        <!-- WebSockets 
+        <dependency org="org.java-websocket" name="Java-WebSocket" rev="1.3.0" conf="compile,runtime->default;sources;javadoc"/>
+        -->
+        
+		<!-- Utility -->
+		<dependency org="commons-codec" name="commons-codec" rev="1.4" conf="compile,runtime->default;sources" />
+		<dependency org="thirdparty" name="commons-io" rev="2.4" />
+		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="compile,runtime->default;sources;javadoc"/>
+        <dependency org="internal" name="SimpleValidation" rev="0.6" conf="compile->compile;runtime->runtime;sources"/>
+		        
+        <!-- Logging -->
+        <dependency org="log4j" name="log4j" rev="1.2.17" conf="compile,runtime->default;sources"/>
+        <dependency org="thirdparty" name="slf4j-log4j12" rev="1.7.7"/>
+        <dependency org="thirdparty" name="slf4j-api" rev="1.7.7"/>
+        
+        <!-- Pdf -->
+        <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.8.9" conf="compile,runtime->default"/>
+        
+
+		<!-- Database -->        
+        <dependency org="mysql" name="mysql-connector-java" rev="5.1.36" conf="compile,runtime->default;sources;javadoc"/>
+        <dependency org="thirdparty" name="c3p0" rev="0.9.2.1" conf="compile->compile;runtime->runtime;sources;javadoc->javadoc"/>
+        <dependency org="internal" name="SimpleResultSetMapper" rev="0.1.43" conf="compile->compile;runtime->runtime;sources;javadoc->javadoc"/>
+        <dependency org="internal" name="SimpleInterceptorProxy" rev="0.0.6" conf="compile->compile;runtime->runtime;sources"/>
+        
+        <!-- Test -->        
+      	<dependency org="org.dbunit" name="dbunit" rev="2.5.1" conf="test->default"/>
+      	<dependency org="com.h2database" name="h2" rev="1.4.189" conf="test->default"/>
+      	<dependency org="junit" name="junit" rev="4.11" conf="test->default;sources"/>
+    	<dependency org="thirdparty" name="cobertura" rev="1.9.4.1" conf="test->compile"/>
+  </dependencies>
+</ivy-module>

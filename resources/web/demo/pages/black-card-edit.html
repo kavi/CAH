@@ -1,0 +1,46 @@
+<div ui-content-for="title">
+  <span>Black Card Editor ( {{ deck.name }} - {{ deck.language.language }} )</span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-header text-center section">
+    <div>
+      <div class="btn-group pull-right">
+	<a ui-turn-on='deckDropdown' class='btn'>
+	  {{ deck.name }} <i class="fa fa-ellipsis-v"></i>
+	</a>
+	<ul ui-state="deckDropdown" class="dropdown-menu" ui-outer-click="Ui.turnOff('deckDropdown')"
+           ui-outer-click-if="Ui.active('deckDropdown')" role="menu" ui-show="deckDropdown" ui-turn-off="deckDropdown">	
+          <li ng-click="selectDeck(d)" ng-repeat="d in decks"><a>{{ d.name }}</a></li>
+	</ul>
+      </div>
+      <div class="btn-group pull-right">
+	<a ui-turn-on='langDropdown' class='btn'>
+	  {{ selectedLanguage.language }} <i class="fa fa-ellipsis-v"></i>
+	</a>
+	<ul ui-state="langDropdown" class="dropdown-menu" ui-outer-click="Ui.turnOff('langDropdown')"
+           ui-outer-click-if="Ui.active('langDropdown')" role="menu" ui-show="langDropdown" ui-turn-off="langDropdown">	
+          <li ng-click="selectLanguage(l)" ng-repeat="l in languages"><a>{{ l.language }}</a></li>
+	</ul>
+      </div>
+      <a href="" 
+	 ng-click="openCreateCard('black')"
+	 class="btn btn-info pull-left">Create Card</a>
+      <a href="#/white-card-edit"
+	 class="btn pull-left">White Cards</a>
+      <div class="form-group">
+	<input class="form-control" type="search" ng-model="cardFilter" placeholder="Search.."/>
+      </div>
+    </div>
+  </div>
+  <div class="scrollable-content">
+    
+    <div ng-click="openEditCard(card, 'black')" ng-repeat="card in deck.blackCards | filter: cardFilter | orderBy:'created':true" href="" class="list-group-item invert">
+      {{ card.text }} <i class="fa fa-trash pull-right" ng-click="deleteBlackCard(card)"></i>
+    </div>
+  </div>
+</div>
+
+<div ui-content-for="modals">
+  <div ng-include="'pages/modal-black-edit.html'"></div>
+</div>
+

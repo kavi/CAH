@@ -1,0 +1,54 @@
+<html ng-app>
+  <head>
+    <title>A Cards Against Humanity Database (work in progress)</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>    
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="game.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+    <div ng-controller="GameCtrl" class="container-fluid">
+      <div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="navbar">
+	      <ul class="nav navbar-nav">
+		<li ng-repeat="m in menus" class="{{ isActiveMenu(m) }}"><a href="#" ng-show="authenticated == m.loginRequired" ng-click="setActiveMenu(m)">{{ m.title }}</a></li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+	<div id="login" class="container" ng-show="activeMenu.id == 'login'">
+	  <div  class="row" >
+	      <form>
+		<div>
+		  Username <input type="text" ng-model="currentuser.name"></input>
+		</div>
+		<div>
+		Password <input type="password" ng-model="currentuser.password"></input>
+		</div>
+		<div>
+		<input class="btn btn-primary" type="button" ng-click="login()" value="Login"></input>
+		</div>
+	      </form>	      
+	  </div>
+	</div> <!-- login -->
+
+	<div id="open-games" class="container" ng-show="activeMenu.id == 'open-games'">
+	  <div  class="row" >
+	    <table>
+	      <thead><th>Name</th><th>Phase</th></thead>
+	      <tr ng-repeat="g in games">
+		<td>{{ g.name }}</td><td>{{ g.phase.name }}</td>
+	      </tr>
+	    </table>
+	  </div>
+	</div> <!-- login -->
+
+    </div> <!-- controller -->
+  </body>
+</html>

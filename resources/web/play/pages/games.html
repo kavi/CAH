@@ -1,0 +1,81 @@
+<div ui-content-for="title">
+    <span>Manage Games ( {{ user.name }} )</span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-content">
+    <div class='section'>
+      <ui-state id='activeTab' default='1'></ui-state>
+
+      <ul class="nav nav-tabs">
+        <li ui-class="{'active': activeTab == 1}">
+          <a ui-set="{'activeTab': 1}">New Game</a>
+        </li>
+        <li ui-class="{'active': activeTab == 2}">
+          <a ui-set="{'activeTab': 2}">Find Games</a>
+        </li>
+      </ul>
+
+      <div ui-if="activeTab == 2">
+	<div class="list-group text-center">
+	  <div class="list-group-item" ng-repeat="g in filterGames(filterGames(games, user, isUserInGame, true), user, isStarted, true)">
+	    <div>
+              <big>{{ g.name }}</big> {{ g.currentPlayer }}
+              <input type="button" class="btn btn-info" ng-click="joinGame(g, user)" value="Join" />
+            </div>
+            <div>
+              <span ng-repeat="p in g.players">
+                <small>{{ p.user.name }} </small>
+              </span>
+            </div>
+	  </div>
+	</div>
+      </div>
+
+      <div ui-if="activeTab == 1">
+	<div class="list-group-item">
+	  <form role="form" class="form-group">
+	    <fieldset>
+	      <div class="btn-group">
+		<a id="language-drp" ui-turn-on='myDropdown' class='btn pull-right'>
+		  {{ selectedLanguage.language }} <i class="fa fa-comment"></i>
+		</a>
+		<ul 
+		   ui-state="myDropdown"	 
+		   class="dropdown-menu"
+		   ui-outer-click="Ui.turnOff('myDropdown')"
+		   ui-outer-click-if="Ui.active('myDropdown')"
+		   role="menu"
+		   ui-show="myDropdown"
+		   ui-turn-off="myDropdown">	
+		  <li ng-click="selectLanguage(l)" ng-repeat="l in languages"><a><i class="fa fa-angle-right"></i> {{ l.language }}</a></li>
+		</ul>
+	      </div>
+	      <div class="form-group">
+		<label for="game-name">Game Name</label>
+		<input id="game-name" type="text" ng-model="newgame.name"/>
+	      </div>
+	      <div class="form-group">
+		<div class="form-element" ng-repeat="d in decks" >
+		  <label for="game-deck-{{d.id}}">{{ d.name }}</label>
+		  <input id="game-deck-{{d.id}}" type="checkbox" ng-checked="isSelected(d)" ng-click="toggleSelected(d)"/>
+		</div>
+	      </div>
+	      <div class="form-group">
+		<label for="game-owner">Owner</label>
+		<input id="game-owner" type="text" ng-model="user.name" ng-disabled="true"/>
+	      </div>
+	      <div class="form-group">
+		<label for="game-ff">Family Filter</label>
+		<input id="game-ff" type="checkbox" ng-model="user.familyFilter" ng-disabled="true"/>
+	      </div>
+	    </fieldset>
+	    <hr />
+	    <input type="button" class="btn btn-primary" ng-click="createGame(newgame)" ng-disabled="newgame.name=='' || selectedDecks.length < 1" value="Create" />
+	  </form>
+	</div>
+      </div> <!-- End Tab -->
+
+
+    </div>
+  </div>
+</div>

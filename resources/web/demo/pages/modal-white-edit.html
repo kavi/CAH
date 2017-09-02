@@ -1,0 +1,34 @@
+<div class="modal" ui-if='modal_white_edit' ui-state='modal_white_edit'>
+  <div class="modal-backdrop in"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" ng-click="closeEdit()">&times;</button>
+        <h4 class="modal-title">Edit White Card</h4>
+      </div>
+      <div class="modal-body">
+	<div placeholder2="{{ editModel.edit ? '' : 'Insert text here..' }}" class="textarea" contenteditable ng-model="editModel.card.text">
+	  {{ editModel.card.text }}
+	</div>
+	<div><input id="safe_for_work" class="form-element" type="checkbox" ng-model="editModel.card.safeForWork">Safe for work</input></div>
+	<button ng-click="getWhiteCardDetails(editModel.cardOld)" ng-show="editModel.edit" class="btn btn-default"><i class="fa {{ editModel.showDetails ? 'fa-angle-double-up' : 'fa-angle-double-down' }}"></i></button>
+
+	<div ng-show="editModel.showDetails">
+	  <big>Card History</big>
+	  <div ng-repeat="revision in editModel.cardOld.revisions | limitTo:4" >
+	    <div class="list-group-item">
+	      <div>{{ revision.createdtstamp | date:'mediumDate' }} by {{ revision.changedBy.name }}</div><div>{{ revision.text }}</div>
+	    </div>
+	  </div>
+	</div>
+      </div>
+      <div class="modal-footer">
+        <button ng-click="deleteAndCloseEdit()" class="btn btn-warn pull-left" ng-show="editModel.edit">Delete</button>
+        <button ng-click="closeEdit()" class="btn btn-default">Close</button>
+        <button ng-click="saveAndCloseEdit()" class="btn btn-primary" ng-disabled="editModel.card.text == ''">
+	  <i class="fa fa-save"></i> Save 
+	</button>
+      </div>
+    </div>
+  </div>
+</div>

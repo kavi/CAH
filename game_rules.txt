@@ -1,0 +1,102 @@
+# Making a new Game
+
+A new Game is made by a logged in User. This user becomes the 'owner' of the game.
+
+When the game is made it is 'active' but not 'started'. This means that other
+User's can join the game.
+
+When a User joins a game he becomes a Player associated to the game.
+
+Once the Game is started new Players can no longer join.
+
+## Nice to have
+
+It would be nice to either send invites to players when you make a new game, or set a password required to join the game.
+
+It would also be nice to allow players to join the game after it has started.
+
+
+# Starting the Game
+
+In a game that is active but not started the following operations are allowed:
+
+ - the Game can be started by the owner (this causes the state to change to 'Started')
+ - the Owner can 'kick' players from the Game - that is they are no longer part of the Game.
+
+
+# Playing the Game
+
+A game that is active and started is a Game that is currently being played.
+
+From here the Game is played in 'rounds' consisting of the following phases:
+
+ - Draw Black Card
+ - Draw Player Hands (White Card)
+ - Play White Cards (Player action)
+ - Vote (Player action)
+ - Cleanup
+
+## Draw Black Card
+
+This phase happens automatically at the beginning of the round. A new Black
+Card is drawn from the Black Card deck and becomes the active Black Card this
+round.
+
+## Draw Player Hands
+
+This phase is also automatic. Player hands are refreshed with cards from the
+White Deck up till the have a full hand. The size of a full hand is $7 +
+cardsToDraw$ from the active Black Card.
+
+## Play White Cards
+
+In this round players must play an amount of white cards equal to
+activeBlackCard.cardsToPick. Once a player has played his card(s) he can
+perform no other actions during this phase.
+
+Once all players have played their cards the Game proceeds to the next phase.
+
+
+## Vote
+
+In this round each player must Vote for the Player he thought played the best
+White Card(s) for the question. A player can not vote on himself. A player
+must vote on exactly one other player.
+
+Once all players have placed a vote the Game proceeds to the next phase.
+
+## Cleanup
+
+The last phase of a round is cleanup. Played cards are now moved to the "White
+Card Discard" pile. The active Black Card is moved to the Black Card Discard
+pile.
+
+The player that received the most Votes gets 1 point. In case of a tie all players
+with the most votes get 1 point.
+
+
+# Actions
+
+When in a Game (an active+started Game must be selected for these actions to make sense)
+a Player can make the following actions.
+
+ - Play White Card(s) (Only in Play White Cards phase, and if he hasn't played
+   cards yet. The Play White Card action must be performed with the amount of cards
+   expected by the active Black Card (cardsToPick).
+
+ - Vote (Only in Vote phase. A player may vote for exactly one other players played cards. 
+   Cannot be performed if the Player has already voted)
+
+ - View Hand (Can be performed at any time)
+
+ - View active Black Card (Can be performed at any time)
+
+ - Discard cards (Can be performed in the Vote phase at the cost of 1 point.
+   Cannot be performed by players with < 1 point). Any number of cards can be
+   discarded per action (no extra cost).
+
+ - View score (Any time)
+
+ - View played cards (Only in the Vote phase)
+   - the player cannot see who played a card until after he has placed his vote.
+   - a player can always see which card he played.

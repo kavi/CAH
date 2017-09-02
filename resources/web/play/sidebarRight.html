@@ -1,0 +1,16 @@
+<div class="scrollable">
+  <h1  ui-toggle="uiSidebarRight" class="scrollable-header app-name">Chat</h1>  
+  <div class="scrollable-content">
+    <div id="chat" class="section">
+      <div ng-repeat="msg in chatRoom.messages">
+	<div><span>[{{ msg.time | date: 'HH:mm' }}] </span><span>{{ msg.sender.name }}:</span> {{ msg.text }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="scrollable-footer">
+    <form>
+      <input type="text" ng-model="message"/>
+      <button class="btn btn-sm btn-info" ng-click="sendMessage(message) ; message = ''">Send</button>
+    </form>
+  </div>
+</div>

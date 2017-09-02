@@ -1,0 +1,86 @@
+<div ui-content-for="title">
+    <span>Manage Games ( {{ user.name }} )</span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-content">
+    <div class='section'>
+      <ui-state id='activeTab' default='1'></ui-state>
+
+      <ul class="nav nav-tabs">
+        <li ui-class="{'active': activeTab == 1}">
+          <a ui-set="{'activeTab': 1}">My Games</a>
+        </li>
+        <li ui-class="{'active': activeTab == 2}">
+          <a ui-set="{'activeTab': 2}">Find Games</a>
+        </li>
+        <li ui-class="{'active': activeTab == 3}">
+          <a ui-set="{'activeTab': 3}">Create Game</a>
+        </li>
+      </ul>
+
+      <div ui-if="activeTab == 1">
+	<div class="list-group">
+	  <div class="list-group-item" ng-repeat="g in filterGames(games, user, isUserInGame) | orderBy : ['started', 'name'] : true">
+	    <div ng-show="isUserInGame(g, user)">
+	      <h4>{{ g.name }}</h4>
+		<div ng-show="!g.started && !canStartGame(g, user) && g.players.length >= 3"><i>Waiting for {{ g.owner.name }} to start</i></div>
+		<div ng-show="!g.started && g.players.length < 3"><i>Waiting for more players</i></div>
+	    </div>
+	    <span ng-repeat="p in g.players">
+	      <small ng-show="p.user.id != g.owner.id">{{ p.user.name }} </small>
+	      <small ng-show="p.user.id == g.owner.id"><i>{{ p.user.name }}</i></small>
+	    </span>
+	    <input type="button" class="btn btn-green" ng-click="startGame(g, user)" ng-show="canStartGame(g, user)" value="Start" />
+	    <!-- TODO -->
+	    <div ng-show="g.started">
+	      <input type="button" class="btn btn-info" ng-click="playGame(g, user)" ng-show="g.started && g.phase.id == 3" value="Play White" />
+	      <input type="button" class="btn btn-info" ng-click="playGame(g, user)" ng-show="g.started && g.phase.id == 4" value="Vote" />
+	      <input type="button" class="btn btn-info" ng-click="playGame(g, user)" ng-show="g.started && g.phase.id == 5" value="Finish Round" />
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      <div ui-if="activeTab == 2">
+	<div class="list-group text-center">
+	  <div class="list-group-item" ng-repeat="g in filterGames(games, user, isUserInGame, true)">
+	    <div>
+              <big>{{ g.name }}</big>
+              <input type="button" class="btn btn-info" ng-click="joinGame(g, user)" value="Join" />
+            </div>
+            <div>
+              <span ng-repeat="p in g.players">
+                <small>{{ p.user.name }} </small>
+              </span>
+            </div>
+	  </div>
+	</div>
+      </div>
+
+      <div ui-if="activeTab == 3">
+	<div class="list-group-item">
+	  <form role="form" class="form-group">
+	    <fieldset>
+	      <div class="form-group">
+		<label for="game-name">Name</label>
+		<input id="game-name" type="text" ng-model="newgame.name"/>
+	      </div>
+	      <div class="form-group">
+		<label for="game-owner">Owner</label>
+		<input id="game-owner" type="text" ng-model="user.name" ng-disabled="true"/>
+	      </div>
+	      <div class="form-group">
+		<label for="game-ff">Family Filter</label>
+		<input id="game-ff" type="checkbox" ng-model="user.familyFilter" ng-disabled="true"/>
+	      </div>
+	    </fieldset>
+	    <hr />
+	    <input type="button" class="btn btn-primary" ng-click="createGame(newgame)" ng-disabled="newgame.name==''" value="Create" />
+	  </form>
+	</div>
+      </div> <!-- End Tab -->
+
+
+    </div>
+  </div>
+</div>

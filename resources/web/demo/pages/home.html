@@ -1,0 +1,43 @@
+<div ui-content-for="title">
+    <span >Welcome to the Cards Against Humanity Database</span>
+</div>
+
+<div class="scrollable">  
+  <div class="scrollable-header section">
+  
+    <div class="pull-right" ng-show="!globals.authenticated">
+      <button type="button" class="btn btn-primary" ng-click="gotoPage('createuser')"><i class="fa fa-user"></i> Create</button>
+      <button type="button" class="btn btn-primary" ng-click="gotoPage('login')"><i class="fa fa-sign-in"></i> Login</button>
+    </div>
+  </div>
+  <div class="scrollable-content list-group-item">
+    <div class="section">
+      <p>
+	<span ng-show="!globals.authenticated">Login/create a user to:</span>
+	<ul>
+	  <li>Create your own cards and generate a PDF ready to print.</li>
+	  <li>Print decks made by other players (and contribute if you know them)</li>
+	  <li>Create new decks</li>
+	</ul>
+      </p>
+      <p>
+	Navigate the database using the Menu in the sidebar.
+	Change the current deck using the Dropdown in the 'Edit White Card' or 'Edit Black Card' page.
+      </p>
+    </div>
+    <div class="section">
+      <div class="btn-group" ng-show="false">
+	<a id="language-drp" ui-turn-on='myDropdown' class='btn pull-right'>
+	  {{ selectedLanguage.language }} <i class="fa fa-comment"></i>
+	</a>
+	<ul ui-state="myDropdown" class="dropdown-menu" ui-outer-click="Ui.turnOff('myDropdown')" ui-outer-click-if="Ui.active('myDropdown')" role="menu" ui-show="myDropdown" ui-turn-off="myDropdown">	
+	  <li ng-click="selectLanguage(l)" ng-repeat="l in languages"><a><i class="fa fa-angle-right"></i> {{ l.language }}</a></li>
+	</ul>
+      </div>
+
+      <button type="button" class="btn btn-lg btn-primary" ng-show="globals.authenticated" ng-click="gotoPage('decks')"><i class="fa fa-file-o"></i> New Deck</button>      
+      <button type="button" class="btn btn-lg btn-primary" ng-show="globals.authenticated" ng-click="gotoPage('white-card-edit')"><i class="fa fa-edit"></i> Edit Answers</button>      
+
+    </div>
+  </div> <!-- end scrollable-content -->
+</div> <!-- end scollable -->

@@ -1,0 +1,114 @@
+<html ng-app>
+  <head>
+    <title>A Cards Against Humanity Database (work in progress)</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>    
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="user.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+    <div ng-controller="UserCtrl" class="col-md-12">
+      <div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="navbar">
+	      <ul class="nav navbar-nav">
+		<li class="{{ isActiveMenu('new-game') }}"><a href="#" ng-show="authenticated" ng-click="setActiveMenu('new-game')">New Game</a></li>
+		<li class="{{ isActiveMenu('list-games') }}"><a href="#" ng-show="authenticated" ng-click="setActiveMenu('list-games')">Games</a></li>
+		<li class="{{ isActiveMenu('edit') }}"><a href="#" ng-show="authenticated" ng-click="setActiveMenu('edit')">Edit</a></li>
+		<li class="{{ isActiveMenu('create') }}"><a href="#" ng-show="authenticated" ng-click="setActiveMenu('create')">Create</a></li>
+		<li class="{{ isActiveMenu('login') }}"><a href="#" ng-show="!authenticated" ng-click="setActiveMenu('login')">Login</a></li>
+		<li><a href="#" class="btn btn-sm" ng-show="authenticated" ng-click="logout()">Logout</a></li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+	<div id="login" class="container" ng-show="activeMenu == 'login'">
+	  <div  class="row" >
+	      <form>
+		<div>
+		  Username <input type="text" ng-model="currentuser.name"></input>
+		</div>
+		<div>
+		Password <input type="password" ng-model="currentuser.password"></input>
+		</div>
+		<div>
+		<input class="btn btn-primary" type="button" ng-click="login()" value="Login"></input>
+		</div>
+	      </form>	      
+	  </div>
+	</div> <!-- login -->
+
+	<div id="create-user" class="container" ng-show="activeMenu == 'create'">
+	  <div  class="row" >
+	      <form>
+		<div>
+		  Username <input type="text" ng-model="newuser.name"></input>
+		</div>
+		<div>
+		  Password <input type="text" ng-model="newuser.password"></input>
+		</div>
+		<div>
+		  Email <input type="text" ng-model="newuser.email"></input>
+		</div>
+		<div>
+		  <input class="btn" type="button" ng-disabled="!validateUser(newuser)" ng-click="createUser()" value="Create"></input>
+		</div>
+	      </form>	      
+	  </div>
+	</div> <!-- create -->
+
+	<div id="edit-user" class="container" ng-show="activeMenu == 'edit'">
+	  <div  class="row" >
+	      <form>
+		<div>
+		  Password <input type="password" ng-model="currentuser.password"></input>
+		</div>
+		<div>
+		  Email <input type="text" ng-model="currentuser.email"></input>
+		</div>
+		<div>
+		  <input class="btn" type="button" ng-disabled="!validateUser(currentuser)" ng-click="updateUser(currentuser)" value="Update"></input>
+		</div>
+	      </form>	      
+	  </div>
+	</div> <!-- edit -->
+
+	<div id="new-game" class="container" ng-show="activeMenu == 'new-game'">
+	  <div  class="row" >
+	      <form>
+		<div>
+		  Name <input type="text" ng-model="newgame.name"></input>
+		</div>
+		<div>
+		  <input class="btn" type="button" ng-click="createGame(newgame)" value="Create Game"></input>
+		</div>
+	      </form>	      
+	  </div>
+	</div> <!-- new game -->
+
+	<div id="list-games" class="container-fluid" ng-show="activeMenu == 'list-games'">
+	  <div class="container" ng-repeat="g in games">
+	    <div class="row well">
+	      <p>{{ g.name }}</p>
+	      <div class="row">
+		<form>
+		  <input class="btn btn-primary" type="button" ng-disabled="currentUserInGame(g)" ng-click="joinGame(g)" value="Join"></input>
+		</form>
+		<form>
+		  <input class="btn btn-success" type="button" ng-show="g.owner.name == currentuser.name" ng-click="startGame(g)" value="Start"></input>
+		  </form>
+	      </div>
+	    </div>
+	  </div>
+	</div> <!-- games -->
+
+	  
+      </div> <!--container -->
+    </div> <!-- controller -->
+  </body>
+</html>

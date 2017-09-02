@@ -1,0 +1,179 @@
+<project name="CardsAgainstHumanity" default="compile" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property name="source" value="1.7" />
+	<property name="target" value="1.7" />
+	<property name="package.name" value="cards-against-humanity" />
+	<property name="package.version" value="0" />
+
+	<import file="externals/java_build.xml" />
+
+	<property name="debian.root.dir" value="${base.dir}/debian" />
+
+	<property name="sql.dir" value="resources/sql" />
+	<property name="sql.updates.dir" value="resources/sql/updates" />
+
+	<target name="dist" depends="compile">
+		<property name="dist.jar" value="${dist.dir}/${ant.project.name}.jar" />
+		<property name="dist.lib.dir" value="${dist.dir}/lib" />
+		<property name="manifest.main-class" value="dk.javacode.cah.rest.CahWebServiceApp" />
+
+		<mkdir dir="${dist.lib.dir}" />
+		<copy todir="${dist.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+		<path id="dist.lib.path">
+			<fileset dir="${dist.lib.dir}" includes="**/*.jar" />
+		</path>
+
+		<manifestclasspath property="manifest.classpath" jarfile="${dist.jar}">
+			<classpath refid="dist.lib.path" />
+		</manifestclasspath>
+
+		<jar destfile="${dist.jar}" basedir="${build.class.dir}">
+			<manifest>
+				<attribute name="Implementation-Vendor" value="dk.javacode" />
+				<attribute name="Implementation-Title" value="${ant.project.name}" />
+				<attribute name="Implementation-Version" value="${project.version}" />
+				<attribute name="Pusblish-Date" value="${timestamp}" />
+				<attribute name="Main-Class" value="${manifest.main-class}" />
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+		</jar>
+
+	</target>
+
+	<target name="clean-debian">
+		<delete dir="${debian.root.dir}" />
+	</target>
+
+	<target name="prepare-debian">
+		<buildnumber file="resources/debian-build-number" />
+		<property name="debian.dir" value="${debian.root.dir}/${package.name}-${package.version}.${build.number}" />
+		<property name="debian.control.dir" value="${debian.dir}/DEBIAN" />
+		<property name="debian.usr.local.dir" value="${debian.dir}/usr/local/${package.name}" />
+		<property name="debian.usr.local.bin.dir" value="${debian.usr.local.dir}/bin" />
+		<property name="debian.usr.local.share.dir" value="${debian.usr.local.dir}/share" />
+		<property name="debian.init.d.dir" value="${debian.dir}/etc/init.d" />
+		<property name="debian.etc.dir" value="${debian.dir}/etc/${package.name}" />
+		<property name="debian.etc.default.dir" value="${debian.dir}/etc/default" />
+		<property name="debian.etc.default.file" value="${debian.etc.default.dir}/${package.name}" />
+		<property name="debian.sql.dir" value="${debian.usr.local.dir}/sql" />
+		<property name="debian.web.dir" value="${debian.usr.local.dir}/web" />
+
+		<mkdir dir="${debian.root.dir}" />
+		<mkdir dir="${debian.usr.local.dir}" />
+		<mkdir dir="${debian.usr.local.bin.dir}" />
+		<mkdir dir="${debian.usr.local.share.dir}" />
+		<mkdir dir="${debian.control.dir}" />
+		<mkdir dir="${debian.init.d.dir}" />
+		<mkdir dir="${debian.etc.dir}" />
+		<mkdir dir="${debian.etc.default.dir}" />
+		<mkdir dir="${debian.sql.dir}" />
+		<mkdir dir="${debian.web.dir}" />
+	</target>
+
+	<target name="debian" depends="dist, prepare-debian">
+
+		<copy todir="${debian.sql.dir}">	
+			<fileset dir="${sql.dir}">
+				<include name="updates/*" />
+				<include name="*.sql" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.usr.local.bin.dir}">
+			<fileset dir="resources/bin">
+				<include name="*.sh" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.usr.local.share.dir}">
+			<fileset dir="resources/images">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.usr.local.dir}">
+			<fileset dir="${dist.dir}">
+				<include name="*.jar" />
+				<include name="lib/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.web.dir}">
+			<fileset dir="resources/web">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.init.d.dir}">
+			<fileset dir="resources/init.d">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.etc.dir}">
+			<fileset dir="resources/etc">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy todir="${debian.control.dir}">
+			<fileset dir="resources/DEBIAN">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<move failonerror="false" file="${debian.etc.dir}/default" tofile="${debian.etc.default.file}">
+		</move>
+		<exec executable="chmod">
+			<arg value="755" />
+			<arg value="${debian.control.dir}/postinst" />
+		</exec>
+		<exec executable="dpkg-deb">
+			<arg value="--build" />
+			<arg value="${debian.dir}" />
+		</exec>
+	</target>
+
+	<target name="setup-db">
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="${externals.lib.dir}/ant/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<property name="db-name" value="cah" />
+		<property name="db-user" value="kavi" />
+		<property name="db-pass" value="test1234" />
+		<property name="db-host" value="127.0.0.1" />
+		<property name="db-port" value="10000" />
+		<sql classpathref="compile.lib.path" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${db-host}:${db-port}/" userid="${db-user}" password="${db-pass}">
+			drop database if exists cah;
+			create database if not exists cah;
+		</sql>
+		<for param="sqlfile">
+			<sort>
+				<path>
+					<fileset dir="${sql.dir}" casesensitive="yes">
+						<include name="*.sql" />
+					</fileset>
+				</path>
+			</sort>
+			<sequential>
+				<sql classpathref="compile.lib.path" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${db-host}:${db-port}/${db-name}" userid="${db-user}" password="${db-pass}" src="@{sqlfile}" />
+			</sequential>
+		</for>
+		<for param="sqlfile">
+			<path>
+				<sort>
+					<fileset dir="${sql.updates.dir}" casesensitive="yes">
+						<include name="*.sql" />
+					</fileset>
+				</sort>
+			</path>
+			<sequential>
+				<sql classpathref="compile.lib.path" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${db-host}:${db-port}/${db-name}" userid="${db-user}" password="${db-pass}" src="@{sqlfile}" />
+			</sequential>
+		</for>
+	</target>
+
+	<target name="apply-sql">
+		<sql classpathref="compile.lib.path" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${db-host}:${db-port}/${db-name}" userid="${db-user}" password="${db-pass}" src="${theFile}" />
+	</target>
+
+
+</project>

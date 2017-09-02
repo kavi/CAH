@@ -1,0 +1,73 @@
+<html ng-app>
+  <head>
+    <title>A Cards Against Humanity Database (work in progress)</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>    
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="mobile.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="mobile.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+    <div ng-controller="WhiteCardCtrl" class="col-md-12">
+
+      <div class="container" ng-show="!authenticated">
+	<div class="col-md-4" >
+	    <input type="text"  ng-model="currentuser.name"/>
+	    <input type="password" ng-model="currentuser.password"/>
+	    <input class="btn btn-primary" type="button" ng-submit="login()" value="Login" />
+	</div>
+      </div>
+
+      <div class="container" ng-show="authenticated">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="navbar">
+	      <ul class="nav navbar-nav">
+		<li><a href="#" class="btn btn-sm" ng-click="setShow('list')">List</a></li>
+		<li><a href="#" class="btn btn-sm" ng-click="setShow('create')">Create</a></li>
+		<li><a href="../admin/pdf" target="_self" download="cah.pdf" class="btn btn-sm" >Download</a></li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+	<div class="row" ng-show="show == 'list'">
+	  <div id="white-card-list" class="col-md-6" >
+	      <form>
+		Search: <input type="test" ng-model="filter"></input>
+	      </form>	      
+	    <div class="well" ng-repeat="c in listCards()">
+	      <div class="row" ng-show="!isCardSelected(c)">
+		<div class="col-md-5" ng-click="selectCard(c)">
+		  {{ getCardText(c) }}
+		  <div class="pull-right">
+		    <input class="btn btn-sm btn-danger" type="button" value="x" ng-click="deleteCard(c)" ng-disabled="false"/>
+		</div>
+		</div>
+	      </div>
+	      <div class="row" ng-show="isCardSelected(c)">
+		<form>
+		  <textarea width="10" ng-model="c.newtext">
+		  </textarea><br/>
+		  <input class="btn btn-sm btn-primary" type="button" value="Save" ng-click="updateCard(c)" ng-disabled="!validateUpdateCard(c)"/>
+		  <input class="btn btn-sm" type="button" value="Cancel" ng-click="deselectCard()"/>
+		</form>
+	      </div>
+	    </div>
+	    <div class="row well">
+	      <form>
+		<input class="btn btn-sm" type="button" ng-click="prev_page()" value="&lt;&lt;"/>
+		<input class="btn btn-sm {{ getPageClass(p) }}" ng-repeat="p in getPages()" type="button" ng-click="setPage(p)" value="{{p}}"></input>
+		<input class="btn btn-sm" type="button" ng-click="next_page()" value="&gt;&gt;"/>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+	<div class="col-md-6"  ng-show="show == 'create'">
+	  <textarea rows="5" ng-model="data.newCard.text"></textarea>
+	  <input type="button" class="btn btn-primary" value="submit" ng-disabled="!validateNewCard()" ng-click="createCard()"/>
+	</div>
+      </div>
+  </body>
+</html>

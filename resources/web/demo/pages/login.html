@@ -1,0 +1,56 @@
+<div ui-content-for="title">
+    <span>Welcome to the CAH Card Database</span>
+</div>
+
+<div class="section">
+  <div class="">
+    <p>
+      Login to browse and edit cards.
+    </p>
+    <p>
+      Don't have a login? <button type="button" class="btn btn-sm btn-default" ng-click="gotoPage('createuser')">Create user</button>
+    </p>
+  </div>
+  
+  <div>
+    <form  name="form" ng-submit="login()" role="form">
+      <fieldset>
+	<legend>Login</legend>
+	
+	<div class="form-group has-success has-feedback">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" class="form-control" ng-model="user.name" required />
+	</div>
+	
+	<div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" class="form-control" ng-model="user.password" required />
+	</div>
+      </fieldset>
+	
+      <hr/>
+	
+      <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-submit="login()">
+	<i class="fa fa-sign-in"></i> Login
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

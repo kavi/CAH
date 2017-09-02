@@ -1,0 +1,41 @@
+<div class="scrollable">  
+  <div class="scrollable-content">
+
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home">
+        <h1>Create User</h1>
+	<p>Passwords are currently send unencrypted so it's adviced to
+	use a password you're not using somewhere else.</p>
+	<p>Already have an account? <button type="button" class="btn btn-sm btn-default" ng-click="gotoPage('login')">Login</button>
+      </div>
+      <div class="list-group-item">
+	<form role="form">
+	   <div class="form-group">
+	     <label for="name">Username <small>- only letters (a-z) and numbers</label>
+	     <input type="input" ng-class="getUsernameInputClass(newuser)" id="name" ng-model="newuser.name">
+	   </div>
+	   <div class="form-group">
+	     <label for="email">Email <small>optional</small></label>
+	     <input type="input" class="form-control" id="email" ng-model="newuser.email">
+	   </div>
+	   <div class="form-group">
+	   </div>
+	   <div class="form-group">
+	     <label for="pwd">Password <i class="fa fa-lock"></i></label>
+	     <input type="password" ng-class="getPasswordInputClass(newuser)" id="pwd" ng-model="newuser.password"></input>
+	   <div class="form-group">
+	     <label for="pwd2">Re-enter password </label>
+	     <input type="password" ng-class="getPassword2InputClass(newuser)"  id="pwd2" ng-model="newuser.password2"></input>
+	   </div>
+	   <div class="form-group">
+	     <label> 
+	     <ui-switch ng-model="editUser.familyFilter"></ui-switch>Family Filter <small>Family filter hides certain cards form the interface</small></label>
+	   </div>
+	   <button type="submit" class="btn btn-primary" ng-disabled="!validateUser(newuser)" ng-click="createUser(newuser)">Create</button>
+	</form>
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="scrollable">  
+  <div class="scrollable-content">
+
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home">
+        <h1>Edit User Profile</h1>
+      </div>
+      <div class="list-group-item">
+	<form role="form">
+	   <div class="form-group">
+	     <label for="email">Email</label>
+	     <input type="email" class="form-control" id="email" ng-model="editUser.email">
+	   </div>
+	   <div class="form-group">
+	   </div>
+	   <div class="form-group">
+	     <label for="pwd">Password </label>
+	     <label for="pwd-lock"><i class="fa fa-lock"></i></label>
+	     <input id="pwd-lock" type="checkbox" ng-model="editUser.editPassword"></input>
+	     <input type="password" class="form-control" id="pwd" ng-show="editUser.editPassword" ng-model="editUser.password"></input>
+	   <div class="form-group" ng-show="editUser.editPassword">
+	     <label for="pwd2">Re-enter password </label>
+	     <input type="password" class="form-control" id="pwd2" ng-model="editUser.password2"></input>
+	   </div>
+	   <div class="form-group">
+	     <label> 
+	     <ui-switch ng-model="editUser.familyFilter"></ui-switch>Family Filter</label>
+	   </div>
+	   <button type="submit" class="btn btn-default" ng-disabled="editUser.editPassword && !validateUser(editUser)" ng-click="updateUser(editUser)">Save Changes</button>
+	</form>
+      </div>
+
+    </div>
+
+  </div>
+</div>

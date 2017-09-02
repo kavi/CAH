@@ -1,0 +1,43 @@
+# UI
+
+
+## Help
+ - Intro on front page?
+   - First login?
+ - Help/About Menu
+ - 
+
+## Standard
+
+
+
+# Backend
+
+## Chat
+ - Add 'friends'
+ - Remove old chat messages
+ (table ChatRoom: <id>, <game_id>, <user_id>, <msg/text>, <timestamp> )
+ (table Friends: <user_id>, <friend_id> )
+
+## Security
+
+ - Hash Password in some way before sending it
+ - Use salts in Db
+ - Use SHA256 for Hashing
+
+
+## Extra features
+ 
+## Standard
+
+ - Game improvement
+ 	- Number of turns
+ 	- Customize Hand Size
+
+ - Allow Discarding cards 
+
+## Improvements
+
+ - Complete ServiceLayer refactoring 
+  
+ 

@@ -1,0 +1,21 @@
+<div class="scrollable">  
+  <div class="scrollable-content">
+
+    <div class="list-group text-center">
+      <!--div class="list-group-item list-group-item-home">
+        <h1>CAH Card Editor <small>(demo)</small></h1>
+      </div-->      
+
+      <input
+	 ng-if="Ui.active('searchBar')"
+	 type="search"
+	 class="form-control scrollable-header"
+	 placeholder="Search.." />
+
+      <a ng-repeat="card in whiteCards" href="#" class="list-group-item">
+        {{ card.text }} <i class="fa fa-chevron-right pull-right"></i>
+      </a>
+    </div>
+
+  </div>
+</div>

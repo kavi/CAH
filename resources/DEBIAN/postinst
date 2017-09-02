@@ -1,0 +1,38 @@
+#!/bin/bash
+# postinst script for cah
+#
+
+NAME=cards-against-humanity
+USER=cah
+SQL_DIR=/usr/local/${NAME}/sql
+BIN_DIR=/usr/local/${NAME}/bin
+PID_DIR=/var/run/${NAME}
+
+set -e
+
+case "$1" in
+  configure)
+     grep -q -E "^${USER}" /etc/passwd || sudo useradd ${USER}
+     [[ -e /var/log/${NAME} ]] || { sudo mkdir /var/log/${NAME} ; sudo chown ${USER}: /var/log/${NAME} ; }
+     
+     sudo chown -R $USER: $BIN_DIR
+     sudo chmod +x $BIN_DIR/*
+     pushd $BIN_DIR
+       ./create_db.sh $SQL_DIR || { echo 'Error creating db. Aborting.' ; exit 1 ; }
+       ./apply-updates.sh $SQL_DIR
+     popd
+     [[ -e ${PID_DIR} ]] || { sudo mkdir ${PID_DIR} ; sudo chown $USER: ${PID_DIR} ; }
+     sudo chmod +x /etc/init.d/${NAME}
+     sudo /etc/init.d/${NAME} restart     
+  ;;
+  abort-upgrade|abort-remove|abort-deconfigure)
+    exit 0
+  ;;
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac
+
+set +e
+exit 0

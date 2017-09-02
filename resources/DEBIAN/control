@@ -1,0 +1,12 @@
+Package: cards-against-humanity
+Version: 0.1
+Section: base
+Priority: optional
+Architecture: all
+Depends: daemon, mysql-server (>= 5), debconf
+Maintainer: Kavi Mellerup <kavimellerup@gmail.com>
+Description: Cards Against Humanity Rest Server.
+ Requires a version of Java (>= 6) - but not included 
+ to give the user a choice between Oracle and OpenJDK.
+
+ 

@@ -1,0 +1,38 @@
+<div ui-content-for="title">
+  <span>Download Pdf</span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-content">
+    <div class='section'>
+	<div class="list-group-item">
+	  <form role="form" class="form-group">
+	    <fieldset>
+	      <div class="btn-group">
+		<a id="language-drp" ui-turn-on='myDropdown' class='btn pull-right'>
+		  {{ selectedLanguage.language }} <i class="fa fa-comment"></i>
+		</a>
+		<ul 
+		   ui-state="myDropdown"	 
+		   class="dropdown-menu"
+		   ui-outer-click="Ui.turnOff('myDropdown')"
+		   ui-outer-click-if="Ui.active('myDropdown')"
+		   role="menu"
+		   ui-show="myDropdown"
+		   ui-turn-off="myDropdown">	
+		  <li ng-click="selectLanguage(l)" ng-repeat="l in languages"><a><i class="fa fa-angle-right"></i> {{ l.language }}</a></li>
+		</ul>
+	      </div>
+	      <div class="form-group">
+		<div class="" ng-repeat="d in decks" >
+		  <label for="game-deck-{{d.id}}">{{ d.name }}</label>
+		  <input class="pull-left" id="game-deck-{{d.id}}" type="checkbox" ng-checked="isSelected(d)" ng-click="toggleSelected(d)"/>
+		</div>
+	      </div>
+	    </fieldset>
+	    <hr />
+	    <a class="btn btn-primary" href="../../admin/pdf?familyFilter={{ globals.user.familyFilter }}&rows=6&decks={{ decksAsList() }}" target="_self" download="cah.pdf">Download <i class="fa fa-file-pdf-o fa-navbar"></i></a>
+	  </form>
+      </div> <!-- End Tab -->
+    </div>
+  </div>
+</div>

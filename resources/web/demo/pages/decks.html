@@ -1,0 +1,46 @@
+<div ui-content-for="title">
+    <span>Manage Decks</span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-content">
+    <div class='section'>
+      <p>
+	Choose a language and a name for your Deck.
+      </p>
+      	<div class="list-group-item">
+	  <form role="form" class="form-group">
+	    <fieldset>
+	      <label for="language-drp">Language</label><br />
+	      <div class="btn-group">
+		<a id="language-drp" ui-turn-on='myDropdown' class='btn pull-right'>
+		  {{ selectedLanguage.language }} <i class="fa fa-comment"></i>
+		</a>
+		<ul 
+		   ui-state="myDropdown"	 
+		   class="dropdown-menu"
+		   ui-outer-click="Ui.turnOff('myDropdown')"
+		   ui-outer-click-if="Ui.active('myDropdown')"
+		   role="menu"
+		   ui-show="myDropdown"
+		   ui-turn-off="myDropdown">	
+		  <li ng-click="selectLanguage(l)" ng-repeat="l in languages"><a><i class="fa fa-angle-right"></i> {{ l.language }}</a></li>
+		</ul>
+	      </div>
+	      <div class="form-group">
+		<label for="game-name">Name</label>
+		<input id="game-name" type="text" ng-model="newDeck.name"/>
+	      </div>
+	    </fieldset>
+	    <input type="button" class="btn btn-primary" ng-click="createDeck(newDeck)" ng-disabled="newDeck.name==''" value="Create" />
+	  </form>
+	</div>
+	<div class="section">
+	  <h4>Existing Decks</h4>
+	  <div ng-repeat="d in decks">
+	    {{ d.name }} ( {{ d.owner.name }} ) 
+	  </div>
+	</div>
+
+    </div>
+  </div>
+</div>

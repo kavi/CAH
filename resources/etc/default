@@ -1,0 +1,28 @@
+# defaults for cards against humanity rest server
+
+# pulled in from the init script; makes things easier.
+NAME=cards-against-humanity
+
+# location of java
+JAVA=/usr/bin/java
+
+# arguments to pass to java
+JAVA_ARGS="-Dlog4j.configuration=file:'/etc/${NAME}/log4j.properties'"
+#JAVA_ARGS="-Xmx256m"
+
+PIDFILE=/var/run/${NAME}/${NAME}.pid
+
+# user and group to be invoked as (default to cah)
+CAH_USER=cah
+CAH_GROUP=cah
+
+# location of the cards-against-humanity jar file
+CAH_HOME=/usr/local/${NAME}
+CAH_JAR=${CAH_HOME}/CardsAgainstHumanity.jar
+
+# log location for sysout - /dev/null to discard
+CAH_LOG=/dev/null
+
+CAH_ARGS=""
+
+HTTP_PORT=9000

@@ -1,0 +1,53 @@
+<div ui-content-for="title">
+    <span>White Card Editor ( {{ deck.name }} - {{ deck.language.language }} ) </span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-header text-center section">
+    <div>
+      <div class="btn-group pull-right">
+	<a ui-turn-on='deckDropdown' class='btn'>
+	  {{ deck.name }} <i class="fa fa-ellipsis-v"></i>
+	</a>
+	<ul 
+           ui-state="deckDropdown"	 
+           class="dropdown-menu"
+           ui-outer-click="Ui.turnOff('deckDropdown')"
+           ui-outer-click-if="Ui.active('deckDropdown')"
+           role="menu"
+           ui-show="deckDropdown"
+           ui-turn-off="deckDropdown">	
+          <li ng-click="selectDeck(d)" ng-repeat="d in decks | orderBy:'id':false"><a>{{ d.name }}</a></li>
+	</ul>
+      </div>
+      <div class="btn-group pull-right">
+	<a ui-turn-on='langDropdown' class='btn'>
+	  {{ selectedLanguage.language }} <i class="fa fa-ellipsis-v"></i>
+	</a>
+	<ul ui-state="langDropdown" class="dropdown-menu" ui-outer-click="Ui.turnOff('langDropdown')"
+           ui-outer-click-if="Ui.active('langDropdown')" role="menu" ui-show="langDropdown" ui-turn-off="langDropdown">	
+          <li ng-click="selectLanguage(l)" ng-repeat="l in languages"><a>{{ l.language }}</a></li>
+	</ul>
+      </div>
+      <a href="" 
+	 ng-click="openCreateCard('white')"
+	 class="btn btn-info pull-left">Create Card</a>
+      <a href="#/black-card-edit"
+	 class="btn pull-left">Black Cards</a>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="search" ng-model="cardFilter" placeholder="Search.."/>
+    </div>
+  </div>
+
+  <div class="scrollable-content">
+    <div class="list-group-item"  ng-repeat="card in deck.whiteCards | filter: cardFilter | orderBy:'created':true" ng-click="openEditCard(card, 'white')">
+      {{ card.text }}
+      <div class="fa fa-trash pull-right" ng-click="deleteWhiteCard(card)"></div>
+    </div>
+  </div>
+</div>
+
+<div ui-content-for="modals">
+  <div ng-include="'pages/modal-white-edit.html'"></div>
+</div>
+

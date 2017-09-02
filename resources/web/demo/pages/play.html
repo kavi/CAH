@@ -1,0 +1,90 @@
+<div ui-content-for="title">
+    <span>{{ game.name }} <small>(playing as {{ user.name }})</small></span>
+</div>
+<div class="scrollable">  
+  <div class="scrollable-content">
+    <div ng-init="showScoreboard='true'" id="scoreboard" class='section' ng-click="showScoreboard = !showScoreboard">
+      <h3>Scoreboard</h3>
+      <div ng-show="showScoreboard" ng-repeat="p in game.players">
+	<div class="list-item">
+	  <span>{{ p.user.name }} : {{ p.points }}</span>
+	  <span ng-show="p.actionPerformed"><i class="fa fa-check"> </i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div ng-show="game.player.actionPerformed">
+	<big><i>You've done your part. Wait for the other players.</i></big>
+      </div>
+    </div>
+
+
+    <div id="black-card-section" class="section">
+      <div class="black-card list-item">
+	<div>
+	  <h3>{{ game.activeBlackCard.card.text }}</h3>
+	</div>
+	<div style="margin-top: 50px;">
+	  <small>Pick: {{ game.activeBlackCard.card.cardsToPick }}</small>
+	</div>
+      </div>
+    </div>
+
+
+
+    <!-- PLAY WHITE(s) -->
+    <div class="section" id="player-hand" ng-show="game.phase.id == 3">
+      <div class="" ng-repeat="c in game.player.cards">
+	<div class="{{ !game.player.actionPerformed && c.picked ? 'white-card-selected' : 'white-card' }}" ng-click="togglePicked(c)">
+	  <small>{{ c.position }}</small> {{ c.text }} 
+	</div>
+      </div>
+
+      <div ng-show="!game.player.actionPerformed">
+	<div ng-show="false" id="picked-cards" class="list-item" ng-repeat="c in pickedCards">
+	  {{ c.text }}
+	  <input type="button" class="btn btn-sm btn-default" value="-" ng-disabled="!c.picked" ng-click="removePickedCard(c)" />
+	</div>
+	<input type="button" class="btn btn-sm btn-primary" value="Play Cards" ng-disabled="pickedCards.length != game.activeBlackCard.card.cardsToPick" ng-click="playCards(game)" />
+      </div>
+    </div>
+    <!-- END PLAY WHITE(s) -->
+
+    <!-- VOTE -->
+    <div id="vote" class="section" ng-show="game.phase.id == 4">
+      <div ng-show="!game.player.actionPerformed">
+	<p>Vote for your favorite answer below (you can't vote for your own answer)</p>
+	<div ng-repeat="pc in game.activeBlackCard.playedCards">
+	  <div class="{{ pc.playedByUser ? 'white-card-disabled' : 'white-card' }}" ng-repeat="c in pc.cards">
+	    {{ c.text }}
+	  </div>
+	  <button class="btn btn-sm btn-default" type="button" ng-show="!pc.playedByUser" value="+1" ng-click="vote(pc)">
+	    <i class="fa fa-thumbs-up"></i> +1
+	  </button>
+	  <hr />
+	</div>
+      </div>
+      <hr />
+    </div>
+    <!-- END PLAY WHITE(s) -->
+
+    <!-- NEXT ROUND -->
+    <div id="vote" class="section" ng-show="game.phase.id == 5">
+      <h2>Finish Round</h2>
+      <div ng-show="!game.player.actionPerformed">
+	<p>The scores for answers for this round can be seen below</p>
+	<div ng-repeat="pc in game.activeBlackCard.playedCards">
+	  {{ pc.score }}
+	  <div ng-repeat="c in pc.cards">
+	    {{ c.text }}
+	  </div>
+	  <hr />
+	</div>
+	<input class="btn btn-sm btn-default" type="button" value="Done" ng-click="nextRound()" />
+      </div>
+    </div>
+    <!-- END PLAY WHITE(s) -->
+
+  </div>
+</div>
